@@ -1,0 +1,32 @@
+* {
+    font-family: Helvetica, sans-serif;
+    box-sizing: border-box;
+  }
+  
+  body {
+    height: 100%;
+    background-color: #D3D3D3;
+    color: black;
+  }
+
+  #the_img{
+    height: 70%;
+    width: 50%;
+  }
+
+  #answers {  
+    display: flex;
+    flex-flow: wrap row-reverse;
+    justify-content: space-around;
+    align-items: flex-end;
+  
+  }
+  
+  .item { 
+    border: 1px solid #333;
+    padding: 1rem;
+    text-align: center;
+    flex: 1;
+    margin: 0.75rem;
+  }
+  
