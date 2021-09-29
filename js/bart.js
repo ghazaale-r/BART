@@ -17,7 +17,7 @@ $(document).ready(function(){
       person = prompt("Please enter your name or id");
     }
     var curr_time = new Date().toLocaleString()
-    storage_name = person.concat("_::_").concat(curr_time)
+    storage_name = person.concat("__").concat(curr_time)
     console.log(storage_name)
     
     $('#pump').click(after_pump);
