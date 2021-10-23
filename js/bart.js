@@ -16,9 +16,8 @@ $(document).ready(function(){
     while (person == null){
       person = prompt("Please enter your name or id");
     }
-    var curr_time = new Date().toLocaleString()
+    var curr_time = new Date().getTime() / 1000;
     storage_name = person.concat("__").concat(curr_time)
-    console.log(storage_name)
     
     $('#pump').click(after_pump);
     $('#collect').click(after_collect);
@@ -84,7 +83,6 @@ function show_collect_img(){
 
 function store_data(){
     last_step += 1
-    console.log(last_step)
     value = {
         'ans' : $(this).text(),
         'img' : $('#the_img').attr('src'),
@@ -173,10 +171,42 @@ function reset(){
 }
 
 
+
+function export_csv(arrayData) {	
+  let header =  ["status","ind","last_step","reaction_time","burst_counter","collect_counter"].join(",") + '\n';
+  let csv = header;
+  for (var k in arrayData){
+      let row = [];
+      let obj = arrayData[k]
+      for (key in obj) {
+          if (obj.hasOwnProperty(key)) {
+              row.push(obj[key]);
+          }
+      }
+      csv += row.join(",")+"\n";
+  };
+	
+	console.log('subject-' + storage_name + '.csv');
+	console.log(csv);
+	
+	$.ajax({
+		type: 'post',
+		cache: false,
+		url: './save_data.php',
+		data: { filename: 'subject-' + storage_name + '.csv', filedata: csv },
+		success: function (response) {
+			console.log(response);
+		},
+		error: function () {
+			console.log('Error');
+		},
+	});
+}
+
+
 function the_end(){
   console.log("the end")
   sub_data = JSON.parse(localStorage.getItem(storage_name));
-  console.log(sub_data)
   value = {
     'status': "The End",
     'ind' : counter,
@@ -188,7 +218,7 @@ function the_end(){
   sub_data[last_step] = value
   
   localStorage.setItem(storage_name, JSON.stringify(sub_data));
-  console.log("-----")
+  
   $('#main').remove();
   var end = document.createElement('section');
   end.style.cssText = 'text-align:center;';
@@ -197,5 +227,7 @@ function the_end(){
   h1.innerHTML = "THE END"
   end.append(h1)
   $('body').append(end)
-  console.log("----")
+	
+  sub_data = JSON.parse(localStorage.getItem(storage_name));
+  export_csv(sub_data);
 }
